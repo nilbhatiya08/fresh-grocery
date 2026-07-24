@@ -74,18 +74,18 @@ export const cities: City[] = [
 
 // ──────────────────────── Categories ────────────────────────
 export const categories: Category[] = [
-  { slug: "vegetables", name: "Fresh Vegetables", image: img("photo-1542838132-92c53300491e"), count: 84, accent: "from-emerald-200 to-emerald-100" },
-  { slug: "fruits", name: "Fresh Fruits", image: img("photo-1610832958506-aa56368176cf"), count: 62, accent: "from-amber-200 to-orange-100" },
-  { slug: "leafy-greens", name: "Leafy Greens", image: img("photo-1576045057995-568f588f82fb"), count: 28, accent: "from-lime-200 to-green-100" },
-  { slug: "exotic", name: "Exotic Vegetables", image: img("photo-1488459716787-25ab03a1b73a"), count: 19, accent: "from-purple-200 to-fuchsia-100" },
-  { slug: "organic", name: "Organic Produce", image: img("photo-1506976785307-8732e854ad03"), count: 41, accent: "from-green-200 to-teal-100" },
-  { slug: "seasonal", name: "Seasonal Fruits", image: img("photo-1553279768-865429fa0078"), count: 23, accent: "from-rose-200 to-pink-100" },
-  { slug: "dairy", name: "Milk & Dairy", image: img("photo-1563636619-e9143da7973b"), count: 34, accent: "from-sky-200 to-blue-100" },
-  { slug: "bakery", name: "Bakery", image: img("photo-1509440159596-0249088772ff"), count: 22, accent: "from-yellow-200 to-amber-100" },
-  { slug: "snacks", name: "Healthy Snacks", image: img("photo-1606312619070-d48b4c652a52"), count: 38, accent: "from-orange-200 to-amber-100" },
-  { slug: "juices", name: "Cold Pressed Juices", image: img("photo-1622597467836-f3285f2131b8"), count: 14, accent: "from-red-200 to-rose-100" },
-  { slug: "dry-fruits", name: "Dry Fruits", image: img("photo-1599599810769-bcde5a160d32"), count: 27, accent: "from-amber-200 to-yellow-100" },
-  { slug: "essentials", name: "Cooking Essentials", image: img("photo-1542838132-92c53300491e"), count: 49, accent: "from-stone-200 to-neutral-100" },
+  { slug: "vegetables", name: "Fresh Vegetables", image: "/images/categories/vegetables.png", count: 84, accent: "from-emerald-200 to-emerald-100" },
+  { slug: "fruits", name: "Fresh Fruits", image: "/images/categories/fruits.png", count: 62, accent: "from-amber-200 to-orange-100" },
+  { slug: "leafy-greens", name: "Leafy Greens", image: "/images/categories/leafy-greens.png", count: 28, accent: "from-lime-200 to-green-100" },
+  { slug: "exotic", name: "Exotic Vegetables", image: "/images/categories/exotic.png", count: 19, accent: "from-purple-200 to-fuchsia-100" },
+  { slug: "organic", name: "Organic Produce", image: "/images/categories/organic.png", count: 41, accent: "from-green-200 to-teal-100" },
+  { slug: "seasonal", name: "Seasonal Fruits", image: "/images/categories/seasonal.png", count: 23, accent: "from-rose-200 to-pink-100" },
+  { slug: "dairy", name: "Milk & Dairy", image: "/images/categories/dairy.png", count: 34, accent: "from-sky-200 to-blue-100" },
+  { slug: "bakery", name: "Bakery", image: "/images/categories/bakery.png", count: 22, accent: "from-yellow-200 to-amber-100" },
+  { slug: "snacks", name: "Healthy Snacks", image: "/images/categories/snacks.png", count: 38, accent: "from-orange-200 to-amber-100" },
+  { slug: "juices", name: "Cold Pressed Juices", image: "/images/categories/juices.png", count: 14, accent: "from-red-200 to-rose-100" },
+  { slug: "dry-fruits", name: "Dry Fruits", image: "/images/categories/dry-fruits.png", count: 27, accent: "from-amber-200 to-yellow-100" },
+  { slug: "essentials", name: "Cooking Essentials", image: "/images/categories/essentials.png", count: 49, accent: "from-stone-200 to-neutral-100" },
 ];
 
 // ──────────────────────── Product factory ────────────────────────
