@@ -58,9 +58,9 @@ export type City = {
   eta?: string;
 };
 
-const img = (id: string, w = 900) =>
-  `/placeholder.jpg`;
-
+const img = (id: string, w = 900) => {
+  return `/images/avatars/${id}.svg`;
+};
 // ──────────────────────── Cities ────────────────────────
 export const cities: City[] = [
   { slug: "ahmedabad", name: "Ahmedabad", live: true, pincode: ["3800"], eta: "30-40 min" },
@@ -109,8 +109,8 @@ const p = (
   tagline,
   description:
     "Sourced from trusted partner farms within 120 km of our sorting facility. Hand-graded the morning of dispatch, tested for residues, and cold-chained to your door.",
-  image,
-  gallery,
+  image: `/images/products/${id}.svg`,
+  gallery: [`/images/products/${id}.svg`],
   weights,
   rating: 4.5,
   reviews: 128,
@@ -379,7 +379,7 @@ export const recipes = [
     time: "20 min",
     difficulty: "Easy",
     serves: 2,
-    image: img("photo-1512621776951-a57141f2eefd"),
+    image: "/images/recipes/green-goddess-bowl.svg",
     tags: ["High Fibre", "Vegan"],
     ingredients: ["Baby Spinach", "Avocado", "Broccoli", "Almonds"],
     excerpt:
@@ -391,7 +391,7 @@ export const recipes = [
     time: "5 min",
     difficulty: "Easy",
     serves: 2,
-    image: img("photo-1546173158-4110d74b9d8d"),
+    image: "/images/recipes/mango-lassi.svg",
     tags: ["No Refined Sugar"],
     ingredients: ["Alphonso Mango", "Greek Yogurt", "Cardamom"],
     excerpt: "Seasonal mango meets thick yogurt and a whisper of cardamom — summer in a glass.",
@@ -402,7 +402,7 @@ export const recipes = [
     time: "15 min",
     difficulty: "Easy",
     serves: 2,
-    image: img("photo-1484723091739-30a097e8f929"),
+    image: "/images/recipes/sourdough-tartine.svg",
     tags: ["Vegetarian"],
     ingredients: ["Sourdough", "Tomatoes", "Basil", "A2 Ghee"],
     excerpt: "Stone-baked sourdough rubbed with ghee, topped with vine-ripened tomato and torn basil.",
@@ -413,7 +413,7 @@ export const recipes = [
     time: "5 min",
     difficulty: "Easy",
     serves: 1,
-    image: img("photo-1553530666-ba11a7da3888"),
+    image: "/images/recipes/berry-smoothie.svg",
     tags: ["High Protein"],
     ingredients: ["Strawberries", "Greek Yogurt", "Almonds"],
     excerpt: "Creamy, filling and ready before the kettle boils. A post-workout favourite.",
@@ -425,7 +425,7 @@ export const testimonials = [
   {
     name: "Ananya Raghavan",
     location: "Satellite, Ahmedabad",
-    avatar: img("photo-1494790108377-be9c29b29330", 200),
+    avatar: "/images/avatars/photo-1494790108377-be9c29b29330.svg",
     rating: 5,
     text: "The difference is in the details — stems are crisp, berries aren't bruised, and the delivery window actually arrives on time. Farmora replaced my weekend market run.",
     verified: true,
@@ -433,7 +433,7 @@ export const testimonials = [
   {
     name: "Vikram Desai",
     location: "Vastrapur, Ahmedabad",
-    avatar: img("photo-1507003211169-0a1dd7228f2d", 200),
+    avatar: "/images/avatars/photo-1507003211169-0a1dd7228f2d.svg",
     rating: 5,
     text: "My morning chai gets its milk before I wake up — that subscription is honestly the best ₹54 I spend every month.",
     verified: true,
