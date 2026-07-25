@@ -7,6 +7,8 @@ import { useCart } from "@/store/shop";
 import { formatINR } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCustomerAuth } from "@/store/customerAuth";
 import type { DeliveryMode } from "@/data/catalog";
 
 const TABS: { id: DeliveryMode | "all"; label: string; icon: typeof Zap; desc: string }[] = [
@@ -17,6 +19,8 @@ const TABS: { id: DeliveryMode | "all"; label: string; icon: typeof Zap; desc: s
 ];
 
 export function CartDrawer() {
+  const router = useRouter();
+  const { isAuthenticated, openLoginModal } = useCustomerAuth();
   const isOpen = useCart((s) => s.isOpen);
   const items = useCart((s) => s.items);
   const close = useCart((s) => s.close);
@@ -222,13 +226,19 @@ export function CartDrawer() {
                   </div>
                 </div>
 
-                <Link
-                  href="/checkout"
-                  onClick={close}
+                <button
+                  onClick={() => {
+                    close();
+                    if (isAuthenticated) {
+                      router.push("/checkout");
+                    } else {
+                      openLoginModal("/checkout", { type: "checkout" });
+                    }
+                  }}
                   className="mt-2 w-full flex items-center justify-center gap-2 bg-cta-500 hover:bg-cta-600 text-white py-3.5 rounded-full font-semibold text-sm transition shadow-glow-cta"
                 >
                   Checkout · {formatINR(total)} <ArrowRight className="w-4 h-4" />
-                </Link>
+                </button>
                 <button onClick={close} className="w-full text-center text-xs text-brand-600 hover:text-brand-900 py-2">
                   Continue shopping
                 </button>

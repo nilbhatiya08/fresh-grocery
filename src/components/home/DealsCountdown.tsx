@@ -37,7 +37,7 @@ export function DealsCountdown() {
   const { h, m, s } = useCountdown(target);
 
   const deals = products
-    .filter((p) => p.weights.some((w) => w.mrp - w.price > 30))
+    .filter((p) => p.category === "vegetables" && p.weights.some((w) => w.mrp > w.price))
     .slice(0, 4);
 
   return (

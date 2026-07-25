@@ -23,9 +23,12 @@ import {
   Package,
   Milk,
   Check,
+  ShieldCheck,
 } from "lucide-react";
 import { useCart, useCity } from "@/store/shop";
+import { useCustomerAuth } from "@/store/customerAuth";
 import { products, categories, cities } from "@/data/catalog";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CityModal } from "@/components/city/CityModal";
 
@@ -41,6 +44,9 @@ const nav = [
 ];
 
 export function Header() {
+  const router = useRouter();
+  const { isAuthenticated, openLoginModal, user } = useCustomerAuth();
+  const isAdmin = user?.mobile === "9773271029" || user?.mobile?.includes("9773271029") || user?.email === "admin@farmora.com";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [catsOpen, setCatsOpen] = useState(false);
@@ -147,7 +153,7 @@ export function Header() {
           </button>
 
           {/* Search */}
-          <div className="flex-1 max-w-xl relative hidden md:block">
+          <form onSubmit={(e) => { e.preventDefault(); if (query.trim()) { router.push(`/shop?q=${encodeURIComponent(query.trim())}`); setQuery(""); } }} className="flex-1 max-w-xl relative hidden md:block">
             <div className="flex items-center glass border border-brand-100 rounded-full pl-4 pr-2 py-2 focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100 transition">
               <Search className="w-4 h-4 text-brand-500" />
               <input
@@ -156,36 +162,55 @@ export function Header() {
                 placeholder="Search products, brands, categories..."
                 className="flex-1 bg-transparent outline-none px-3 text-sm placeholder:text-brand-400"
               />
-              <button className="text-xs font-semibold text-white bg-cta-500 hover:bg-cta-600 px-3 py-1.5 rounded-full">
+              <button type="submit" className="text-xs font-semibold text-white bg-cta-500 hover:bg-cta-600 px-3 py-1.5 rounded-full transition">
                 Search
               </button>
             </div>
             {query && (
               <div className="absolute top-full left-0 right-0 mt-2 glass-strong border border-brand-100 rounded-2xl shadow-lift overflow-hidden z-50">
                 {suggestions.length === 0 ? (
-                  <div className="p-4 text-sm text-brand-600">No results for "{query}"</div>
-                ) : (
-                  suggestions.map((s) => (
+                  <div className="p-5 text-center">
+                    <div className="text-sm font-semibold text-brand-800 mb-1">No direct active vegetable matches for "{query}"</div>
+                    <p className="text-xs text-brand-500 mb-3">It might be out of stock today or coming soon in our next category launch!</p>
                     <Link
-                      key={s.id}
-                      href={`/product/${s.slug}`}
+                      href={`/shop?q=${encodeURIComponent(query.trim())}`}
                       onClick={() => setQuery("")}
-                      className="flex items-center gap-3 px-3 py-2.5 hover:bg-brand-50"
+                      className="inline-block px-4 py-2 rounded-full bg-cta-500 text-white text-xs font-bold hover:bg-cta-600 transition shadow-sm"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-brand-50 overflow-hidden shrink-0">
-                        <img src={s.image} alt="" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium truncate">{s.name}</div>
-                        <div className="text-xs text-brand-500">{s.subcategory}</div>
-                      </div>
-                      <div className="text-sm font-semibold text-brand-800">₹{s.weights[0].price}</div>
+                      View Options & Notify Me →
                     </Link>
-                  ))
+                  </div>
+                ) : (
+                  <>
+                    {suggestions.map((s) => (
+                      <Link
+                        key={s.id}
+                        href={`/product/${s.slug}`}
+                        onClick={() => setQuery("")}
+                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-brand-50 transition"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-brand-50 overflow-hidden shrink-0">
+                          <img src={s.image} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium truncate">{s.name}</div>
+                          <div className="text-xs text-brand-500">{s.subcategory}</div>
+                        </div>
+                        <div className="text-sm font-semibold text-brand-800">₹{s.weights[0].price}</div>
+                      </Link>
+                    ))}
+                    <Link
+                      href={`/shop?q=${encodeURIComponent(query.trim())}`}
+                      onClick={() => setQuery("")}
+                      className="block text-center py-2.5 bg-brand-50/80 hover:bg-brand-100/80 text-xs font-bold text-brand-900 border-t border-brand-100 transition"
+                    >
+                      View all results for "{query}" →
+                    </Link>
+                  </>
                 )}
               </div>
             )}
-          </div>
+          </form>
 
           {/* Nav */}
           <nav className="hidden xl:flex items-center gap-1 text-sm">
@@ -240,6 +265,16 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 ml-auto md:ml-0">
+            {isAuthenticated && isAdmin && (
+              <Link
+                href="/admin"
+                title="Go to Enterprise Admin Dashboard"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full text-xs font-bold hover:shadow-md transition shadow-sm mr-1 animate-pulse"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Admin Portal</span>
+              </Link>
+            )}
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
@@ -247,20 +282,26 @@ export function Header() {
             >
               <Search className="w-5 h-5" />
             </button>
-            <Link
-              href="/account"
+            <button
+              onClick={() => {
+                if (isAuthenticated) router.push("/account");
+                else openLoginModal("/account");
+              }}
               aria-label="Account"
               className="hidden sm:grid place-items-center p-2.5 text-brand-800 hover:bg-brand-50 rounded-full"
             >
               <User className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/wishlist"
+            </button>
+            <button
+              onClick={() => {
+                if (isAuthenticated) router.push("/account?tab=wishlist");
+                else openLoginModal("/account?tab=wishlist");
+              }}
               aria-label="Wishlist"
               className="relative p-2.5 text-brand-800 hover:bg-brand-50 rounded-full"
             >
               <Heart className="w-5 h-5" />
-            </Link>
+            </button>
             <button
               onClick={openCart}
               aria-label="Cart"
@@ -339,6 +380,31 @@ export function Header() {
                     {n.label}
                   </Link>
                 ))}
+                
+                <div className="my-2 border-t border-brand-100 pt-2" />
+                
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    if (isAuthenticated) router.push("/account");
+                    else openLoginModal("/account");
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white text-left"
+                >
+                  <User className="w-4 h-4 text-brand-600" />
+                  My Account
+                </button>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    if (isAuthenticated) router.push("/account?tab=wishlist");
+                    else openLoginModal("/account?tab=wishlist");
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white text-left"
+                >
+                  <Heart className="w-4 h-4 text-brand-600" />
+                  Wishlist
+                </button>
               </nav>
             </motion.aside>
           </>
@@ -354,36 +420,60 @@ export function Header() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-cream-50 p-4 md:hidden"
           >
-            <div className="flex items-center gap-2">
+            <form onSubmit={(e) => { e.preventDefault(); if (query.trim()) { router.push(`/shop?q=${encodeURIComponent(query.trim())}`); setSearchOpen(false); setQuery(""); } }} className="flex items-center gap-2">
               <div className="flex-1 flex items-center bg-white border border-brand-100 rounded-full pl-4 pr-2 py-2">
                 <Search className="w-4 h-4 text-brand-500" />
                 <input
                   autoFocus
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search..."
+                  placeholder="Search vegetables, categories..."
                   className="flex-1 bg-transparent outline-none px-3 text-sm"
                 />
+                <button type="submit" className="text-xs font-semibold text-white bg-cta-500 px-3 py-1 rounded-full">Go</button>
               </div>
-              <button onClick={() => { setSearchOpen(false); setQuery(""); }} className="text-sm text-brand-700 px-2">Cancel</button>
-            </div>
-            {suggestions.length > 0 && (
-              <div className="mt-3 bg-white rounded-2xl border border-brand-100 overflow-hidden">
-                {suggestions.map((s) => (
-                  <Link
-                    key={s.id}
-                    href={`/product/${s.slug}`}
-                    onClick={() => { setSearchOpen(false); setQuery(""); }}
-                    className="flex items-center gap-3 p-3"
-                  >
-                    <Image src={s.image} alt="" width={40} height={40} className="w-10 h-10 rounded-lg object-cover" />
-                    <div className="flex-1">
-                      <div className="text-sm font-medium">{s.name}</div>
-                      <div className="text-xs text-brand-500">{s.subcategory}</div>
-                    </div>
-                    <div className="text-sm font-semibold">₹{s.weights[0].price}</div>
-                  </Link>
-                ))}
+              <button type="button" onClick={() => { setSearchOpen(false); setQuery(""); }} className="text-sm text-brand-700 px-2">Cancel</button>
+            </form>
+            {query && (
+              <div className="mt-3 bg-white rounded-2xl border border-brand-100 overflow-hidden shadow-md">
+                {suggestions.length === 0 ? (
+                  <div className="p-5 text-center">
+                    <div className="text-sm font-semibold text-brand-800 mb-1">No direct active matches for "{query}"</div>
+                    <p className="text-xs text-brand-500 mb-3">It might be out of stock today or launching soon!</p>
+                    <Link
+                      href={`/shop?q=${encodeURIComponent(query.trim())}`}
+                      onClick={() => { setSearchOpen(false); setQuery(""); }}
+                      className="inline-block px-4 py-2 rounded-full bg-cta-500 text-white text-xs font-bold"
+                    >
+                      View Options & Notify Me →
+                    </Link>
+                  </div>
+                ) : (
+                  <>
+                    {suggestions.map((s) => (
+                      <Link
+                        key={s.id}
+                        href={`/product/${s.slug}`}
+                        onClick={() => { setSearchOpen(false); setQuery(""); }}
+                        className="flex items-center gap-3 p-3 hover:bg-brand-50 border-b border-brand-50 last:border-0"
+                      >
+                        <Image src={s.image} alt="" width={40} height={40} className="w-10 h-10 rounded-lg object-cover" />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium">{s.name}</div>
+                          <div className="text-xs text-brand-500">{s.subcategory}</div>
+                        </div>
+                        <div className="text-sm font-semibold">₹{s.weights[0].price}</div>
+                      </Link>
+                    ))}
+                    <Link
+                      href={`/shop?q=${encodeURIComponent(query.trim())}`}
+                      onClick={() => { setSearchOpen(false); setQuery(""); }}
+                      className="block text-center py-2.5 bg-brand-50 text-xs font-bold text-brand-900 border-t border-brand-100"
+                    >
+                      View all results for "{query}" →
+                    </Link>
+                  </>
+                )}
               </div>
             )}
           </motion.div>

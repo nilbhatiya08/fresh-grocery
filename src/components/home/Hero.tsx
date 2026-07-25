@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight, Zap, Package, Milk, MapPin } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Zap, Package, Milk, MapPin, Leaf } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCity } from "@/store/shop";
@@ -23,41 +23,41 @@ const slides: Slide[] = [
     eyebrow: "Instant Delivery · 30-40 Minutes",
     title: "Farm-picked,\nat your door in a flash.",
     subtitle:
-      "Every tomato, mango and basil leaf travels from our partner farms to your kitchen in under 14 hours — delivered in 30-40 minutes inside Ahmedabad & Gandhinagar.",
+      "Every tomato, potato, onion and spinach bunch travels from our partner farms to your kitchen in under 14 hours — delivered in 30-40 minutes inside Ahmedabad & Gandhinagar.",
     mode: "instant",
     cta: { label: "⚡ Order instant", href: "/shop?mode=instant" },
     secondary: { label: "Check pincode", href: "#pincode" },
-    image: "/placeholder.jpg",
+    image: "/images/products/tomato.jpg",
     gradient: "from-cta-700 via-cta-600 to-cta-500",
   },
   {
     eyebrow: "Bulk Orders · Next-Day Delivery",
-    title: "For restaurants, societies\nand serious kitchens.",
+    title: "For restaurants, caterers\nand big societies.",
     subtitle:
-      "Wholesale pricing on 500+ SKUs. Scheduled next-day delivery, GST invoices, and a dedicated account manager for orders above ₹5,000.",
+      "Wholesale pricing on farm-fresh vegetables. Scheduled next-day morning delivery, GST invoices, and a dedicated account manager for orders above ₹5,000.",
     mode: "bulk",
     cta: { label: "📦 Plan bulk order", href: "/bulk" },
     secondary: { label: "Corporate enquiry", href: "/bulk#corporate" },
-    image: "/placeholder.jpg",
+    image: "/images/products/potato.jpg",
     gradient: "from-brand-900 via-brand-800 to-emerald-700",
   },
   {
-    eyebrow: "Daily Dairy Subscription",
-    title: "Your morning chai,\nnever without milk.",
+    eyebrow: "Daily Sabzi Subscription",
+    title: "Your daily salad & sabzi,\nfresh every morning.",
     subtitle:
-      "Fresh A2 milk, paneer and curd delivered every morning before 7 AM. Pause on vacations, skip tomorrow, increase quantity — all from the app.",
+      "Fresh cucumbers, carrots, beetroot, and leafy greens delivered automatically every morning before 7 AM. Pause on vacations, skip tomorrow, or modify anytime from the app.",
     mode: "subscription",
-    cta: { label: "🥛 Start subscription", href: "/subscription" },
+    cta: { label: "🥗 Start sabzi plan", href: "/subscription" },
     secondary: { label: "How it works", href: "/subscription#how" },
-    image: "/placeholder.jpg",
-    gradient: "from-sky-900 via-sky-800 to-blue-700",
+    image: "/images/products/cucumber.jpg",
+    gradient: "from-emerald-900 via-emerald-800 to-teal-700",
   },
 ];
 
 const modeColor: Record<Slide["mode"], string> = {
   instant: "bg-cta-500 text-white shadow-glow-cta",
   bulk: "bg-white text-brand-900",
-  subscription: "bg-sky-500 text-white",
+  subscription: "bg-emerald-500 text-white",
 };
 
 export function Hero() {
@@ -113,7 +113,7 @@ export function Hero() {
                   <span className={`inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full ${modeColor[slide.mode]}`}>
                     {slide.mode === "instant" && <Zap className="w-3.5 h-3.5"/>}
                     {slide.mode === "bulk" && <Package className="w-3.5 h-3.5"/>}
-                    {slide.mode === "subscription" && <Milk className="w-3.5 h-3.5"/>}
+                    {slide.mode === "subscription" && <Leaf className="w-3.5 h-3.5"/>}
                     {slide.eyebrow}
                   </span>
                   <span className="inline-flex items-center gap-1.5 text-xs bg-white/15 backdrop-blur text-white px-3 py-1.5 rounded-full border border-white/20">
@@ -181,9 +181,9 @@ export function Hero() {
       <div className="relative mx-auto max-w-7xl px-5 md:px-8 -mt-16 md:-mt-20 z-10">
         <div className="grid md:grid-cols-3 gap-4">
           {[
-            { icon: Zap, mode: "instant", title: "Instant Delivery", desc: "Groceries in 30–40 minutes", bg: "from-cta-500 to-orange-500", cta: "Shop now", href: "/shop?mode=instant", live: "Live in Ahmedabad · Gandhinagar" },
-            { icon: Package, mode: "bulk", title: "Bulk Orders", desc: "Next-day for restaurants & societies", bg: "from-brand-800 to-brand-600", cta: "Plan bulk", href: "/bulk", live: "GST invoices · from ₹5,000" },
-            { icon: Milk, mode: "subscription", title: "Dairy Subscription", desc: "Milk, paneer, curd every morning", bg: "from-sky-600 to-blue-600", cta: "Subscribe", href: "/subscription", live: "Pause · Skip · Resume anytime" },
+            { icon: Zap, mode: "instant", title: "Instant Delivery", desc: "Fresh vegetables in 30–40 mins", bg: "from-cta-500 to-orange-500", cta: "Shop now", href: "/shop?mode=instant", live: "Live in Ahmedabad · Gandhinagar" },
+            { icon: Package, mode: "bulk", title: "Bulk Orders", desc: "Next-day for restaurants & caterers", bg: "from-brand-800 to-brand-600", cta: "Plan bulk", href: "/bulk", live: "GST invoices · from ₹5,000" },
+            { icon: Leaf, mode: "subscription", title: "Sabzi Subscription", desc: "Daily sabzi & salad every morning", bg: "from-emerald-600 to-teal-600", cta: "Subscribe", href: "/subscription", live: "Pause · Skip · Resume anytime" },
           ].map((c) => (
             <Link
               key={c.mode}

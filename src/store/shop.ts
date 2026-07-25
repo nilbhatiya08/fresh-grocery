@@ -150,7 +150,7 @@ export const useWishlist = create<Wishlist>()(
 );
 
 // ──────────────────────── Toasts ────────────────────────
-type Toast = { id: string; message: string; tone?: "success" | "info" };
+type Toast = { id: string; message: string; tone?: "success" | "info" | "error" | "warning" };
 type ToastState = {
   toasts: Toast[];
   push: (message: string, tone?: Toast["tone"]) => void;

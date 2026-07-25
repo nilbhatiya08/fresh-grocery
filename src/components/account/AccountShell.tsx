@@ -17,6 +17,9 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCustomerAuth } from "@/store/customerAuth";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const nav = [
   { id: "dashboard", label: "Dashboard", icon: User },
@@ -37,7 +40,21 @@ const orders = [
 ];
 
 export function AccountShell() {
-  const [active, setActive] = useState("dashboard");
+  const { user, logout } = useCustomerAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialTab = searchParams?.get("tab") || "dashboard";
+  const [active, setActive] = useState(initialTab);
+
+  useEffect(() => {
+    if (searchParams?.get("tab")) {
+      setActive(searchParams.get("tab")!);
+    }
+  }, [searchParams]);
+
+  const firstName = user?.name?.split(" ")[0] || "Guest";
+  const initials = user?.name?.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "GU";
+  const isAdmin = user?.mobile === "9773271029" || user?.mobile?.includes("9773271029") || user?.email === "admin@farmora.com";
 
   return (
     <div>
@@ -45,7 +62,7 @@ export function AccountShell() {
         <div className="text-xs text-brand-500 mb-2">
           <a href="/" className="hover:text-brand-700">Home</a> / My Account
         </div>
-        <h1 className="font-display text-4xl md:text-5xl text-brand-950">Hi, Aarav 👋</h1>
+        <h1 className="font-display text-4xl md:text-5xl text-brand-950">Hi, {firstName} 👋</h1>
         <p className="text-brand-700 mt-1">Welcome back. Here&apos;s what&apos;s fresh today.</p>
       </div>
 
@@ -53,13 +70,37 @@ export function AccountShell() {
         <aside className="bg-white rounded-3xl border border-brand-100 p-4 lg:sticky lg:top-28 self-start">
           <div className="flex items-center gap-3 p-3 mb-3 bg-brand-50 rounded-2xl">
             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 grid place-items-center text-white font-semibold">
-              AS
+              {initials}
             </div>
             <div>
-              <div className="text-sm font-semibold">Aarav Sharma</div>
-              <div className="text-xs text-brand-600">Gold Member · 2,450 pts</div>
+              <div className="text-sm font-semibold flex items-center gap-1.5">
+                {user?.name || "Guest User"}
+                {isAdmin && (
+                  <span className="px-1.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full border border-emerald-300">
+                    Admin
+                  </span>
+                )}
+              </div>
+              <div className="text-xs text-brand-600">Gold Member · {user?.points || 0} pts</div>
             </div>
           </div>
+
+          {isAdmin && (
+            <a
+              href="/admin"
+              className="w-full mb-3 flex items-center justify-between gap-2 p-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-2xl text-xs font-bold shadow-md transition group"
+            >
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 bg-white/20 rounded-lg group-hover:scale-110 transition">🛡️</span>
+                <div>
+                  <div className="text-white font-extrabold text-xs">Enterprise Portal</div>
+                  <div className="text-[10px] text-emerald-100 font-normal">Super Admin Dashboard</div>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-white/80 group-hover:translate-x-0.5 transition" />
+            </a>
+          )}
+
           <nav className="space-y-0.5">
             {nav.map((n) => (
               <button
@@ -75,7 +116,13 @@ export function AccountShell() {
                 {active === n.id && <ChevronRight className="w-4 h-4" />}
               </button>
             ))}
-            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-left text-berry hover:bg-rose-50">
+            <button 
+              onClick={() => {
+                logout();
+                router.push("/");
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-left text-berry hover:bg-rose-50"
+            >
               <LogOut className="w-4 h-4" /> Sign out
             </button>
           </nav>

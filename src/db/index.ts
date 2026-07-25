@@ -1,5 +1,4 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import mysql from "mysql2/promise";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -8,17 +7,32 @@ if (!databaseUrl) {
 }
 
 const globalForDb = globalThis as typeof globalThis & {
-  __arenaNextJsPostgresqlPool?: Pool;
+  __farmoraPool?: mysql.Pool;
 };
 
-export const pool =
-  globalForDb.__arenaNextJsPostgresqlPool ??
-  new Pool({
-    connectionString: databaseUrl,
+export const pool: mysql.Pool =
+  globalForDb.__farmoraPool ??
+  mysql.createPool({
+    uri: databaseUrl,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
   });
 
 if (process.env.NODE_ENV !== "production") {
-  globalForDb.__arenaNextJsPostgresqlPool = pool;
+  globalForDb.__farmoraPool = pool;
 }
 
-export const db = drizzle(pool);
+// Helper: get a connection, run a query, release
+export async function query<T = any>(
+  sql: string,
+  values?: any[]
+): Promise<T[]> {
+  const [rows] = await pool.execute(sql, values);
+  return rows as T[];
+}
+
+// Helper: get a connection for transactions
+export async function getConnection() {
+  return pool.getConnection();
+}

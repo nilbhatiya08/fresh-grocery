@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { CityNotifyAuto } from "@/components/city/CityModal";
+import { CustomerLoginModal } from "@/components/auth/CustomerLoginModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <CartDrawer />
         <CityNotifyAuto />
+        <CustomerLoginModal />
         <Toaster />
       </body>
     </html>

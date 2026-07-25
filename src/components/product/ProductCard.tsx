@@ -7,6 +7,9 @@ import { Heart, Eye, Plus, Minus, Star, Leaf as LeafIcon, Timer, Zap, Package, M
 import type { DeliveryMode, Product } from "@/data/catalog";
 import { cn, formatINR, percentOff } from "@/lib/utils";
 import { useCart, useWishlist, useToasts } from "@/store/shop";
+import { useCustomerAuth } from "@/store/customerAuth";
+import { useAdminStore } from "@/store/adminStore";
+import { isCategoryComingSoon } from "@/lib/categoryHelper";
 
 const MODE_ICON: Record<DeliveryMode, typeof Zap> = {
   instant: Zap,
@@ -24,6 +27,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   const wishlist = useWishlist((s) => s.ids);
   const toggleWish = useWishlist((s) => s.toggle);
   const push = useToasts((s) => s.push);
+  const { isAuthenticated, openLoginModal } = useCustomerAuth();
+  const adminCategories = useAdminStore((s) => s.categories);
+  const isComingSoon = isCategoryComingSoon(product.category, adminCategories);
 
   // price depends on mode
   let price = weight.price;
@@ -86,8 +92,12 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         <button
           onClick={(e) => {
             e.preventDefault();
-            toggleWish(product.id);
-            push(isWished ? "Removed from wishlist" : "Added to wishlist", "info");
+            if (isAuthenticated) {
+              toggleWish(product.id);
+              push(isWished ? "Removed from wishlist" : "Added to wishlist", "info");
+            } else {
+              openLoginModal(null, { type: "wishlist", payload: { productId: product.id } });
+            }
           }}
           aria-label="Wishlist"
           className={cn(
@@ -185,7 +195,16 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             </div>
           </div>
 
-          {!inCart ? (
+          {isComingSoon ? (
+            <button
+              disabled
+              className="inline-flex items-center gap-1 text-xs font-bold px-3.5 py-2.5 rounded-full bg-amber-500/10 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/50 cursor-not-allowed opacity-90 shadow-sm"
+              title="This category is launching soon"
+            >
+              <span>🚀</span>
+              <span>Coming Soon</span>
+            </button>
+          ) : !inCart ? (
             <button
               onClick={() => {
                 add(product, weightIdx, mode);
