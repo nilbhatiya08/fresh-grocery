@@ -40,7 +40,7 @@ export interface AdminProduct extends Product {
 export interface AdminCategory extends Category {
   icon?: string;
   featured?: boolean;
-  status?: string;
+  status?: "Active" | "Coming Soon" | "Hidden";
   order?: number;
 }
 
