@@ -1,4 +1,4 @@
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
 import path from "path";
 import { randomUUID } from "crypto";
 
@@ -6,28 +6,26 @@ const dbPath = path.resolve("grocery.db");
 
 // Store on globalThis to prevent multiple instances during development hot-reloads
 const globalForDb = globalThis as typeof globalThis & {
-  __sqliteDb?: sqlite3.Database;
+  __sqliteDb?: Database.Database;
 };
 
-export const db: sqlite3.Database =
+export const db: Database.Database =
   globalForDb.__sqliteDb ??
-  new sqlite3.Database(dbPath, (err) => {
-    if (err) {
-      console.error("[DB] Failed to connect to SQLite:", err.message);
-    } else {
-      console.log("[DB] SQLite database connected at:", dbPath);
+  (() => {
+    try {
+      const conn = new Database(dbPath, { timeout: 10000 });
+      conn.pragma("journal_mode = WAL");
+      console.log("[DB] better-sqlite3 database connected at:", dbPath);
+      return conn;
+    } catch (err: any) {
+      console.error("[DB] Failed to connect to better-sqlite3:", err.message);
+      throw err;
     }
-  });
+  })();
 
 if (process.env.NODE_ENV !== "production") {
   globalForDb.__sqliteDb = db;
 }
-
-// Enable WAL mode and busy timeout
-db.serialize(() => {
-  db.run("PRAGMA journal_mode = WAL");
-  db.run("PRAGMA busy_timeout = 10000");
-});
 
 function translateSql(sql: string): string {
   let s = sql;
@@ -53,19 +51,25 @@ function translateSql(sql: string): string {
   return s;
 }
 
-// Promisified execution function
+// Promisified execution function mapping to better-sqlite3 synchronous operations
 function executeSql<T = any>(sql: string, params: any[] = []): Promise<T[]> {
   const translated = translateSql(sql);
-  return new Promise((resolve, reject) => {
-    db.all(translated, params, (err, rows) => {
-      if (err) {
-        console.error(`[DB Error] SQL: ${translated} | Params:`, params, "| Error:", err.message);
-        reject(err);
-      } else {
-        resolve(rows as T[]);
-      }
-    });
-  });
+  try {
+    const stmt = db.prepare(translated);
+    let rows: any[];
+
+    if (stmt.reader) {
+      rows = stmt.all(...params);
+    } else {
+      stmt.run(...params);
+      rows = [];
+    }
+
+    return Promise.resolve(rows as T[]);
+  } catch (err: any) {
+    console.error(`[DB Error] SQL: ${translated} | Params:`, params, "| Error:", err.message);
+    return Promise.reject(err);
+  }
 }
 
 // Pool interface mapping to SQLite execution
