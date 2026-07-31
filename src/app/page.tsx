@@ -11,7 +11,6 @@ import { BrandMarquee } from "@/components/home/BrandMarquee";
 import { MobileApp } from "@/components/home/MobileApp";
 import {
   bestSellers,
-  organic,
   products,
 } from "@/data/catalog";
 import type { Metadata } from "next";
@@ -43,15 +42,6 @@ export default function HomePage() {
         <DealsCountdown />
 
         <WhyChooseUs />
-
-        <ProductSection
-          eyebrow="Certified Organic"
-          title={<>Produce that&apos;s <span className="italic text-brand-600">truly clean</span>.</>}
-          description="Residue-tested, India Organic-certified, and grown without synthetic pesticides."
-          products={organic.slice(0, 4)}
-          cta={{ label: "Shop organic", href: "/shop?filter=organic" }}
-          columns={4}
-        />
 
         <Reviews />
         <MobileApp />
