@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, Eye, Plus, Minus, Star, Leaf as LeafIcon, Timer, Zap, Package, Milk } from "lucide-react";
+import { Heart, Plus, Minus, Star, Leaf as LeafIcon, Timer, Zap, Package, Milk } from "lucide-react";
 import type { DeliveryMode, Product } from "@/data/catalog";
 import { cn, formatINR, percentOff } from "@/lib/utils";
 import { useCart, useWishlist, useToasts } from "@/store/shop";
@@ -108,15 +108,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           <Heart className="w-4 h-4" fill={isWished ? "currentColor" : "none"} />
         </button>
 
-        {/* Quick view overlay */}
-        <div className="absolute inset-x-3 bottom-3 flex gap-1.5 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition duration-300 z-10 pointer-events-none">
-          <Link
-            href={`/product/${product.slug}`}
-            className="flex-1 glass-strong text-brand-900 text-xs font-semibold py-2 rounded-full grid place-items-center gap-1 pointer-events-auto"
-          >
-            <Eye className="w-3.5 h-3.5 inline" /> Quick view
-          </Link>
-        </div>
+
       </div>
 
       {/* Content */}
