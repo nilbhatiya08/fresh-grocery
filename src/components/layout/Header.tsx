@@ -175,15 +175,15 @@ export function Header() {
 
           {/* Search */}
           <form onSubmit={(e) => { e.preventDefault(); if (query.trim()) { router.push(`/shop?q=${encodeURIComponent(query.trim())}`); setQuery(""); } }} className="flex-1 min-w-[120px] max-w-md xl:max-w-[280px] 2xl:max-w-xl relative hidden md:block">
-            <div className="flex items-center glass border border-brand-100 rounded-full pl-4 pr-2 py-2 focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100 transition">
-              <Search className="w-4 h-4 text-brand-500" />
+            <div className="flex items-center justify-between gap-2 glass border border-brand-100 rounded-full pl-4 pr-1.5 py-1.5 focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100 transition">
+              <Search className="w-4 h-4 text-brand-500 shrink-0" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search products, brands, categories..."
-                className="flex-1 bg-transparent outline-none px-3 text-sm placeholder:text-brand-400"
+                placeholder="Search fresh produce..."
+                className="flex-1 min-w-0 bg-transparent outline-none px-1 text-sm placeholder:text-brand-400"
               />
-              <button type="submit" className="text-xs font-semibold text-white bg-cta-500 hover:bg-cta-600 px-3 py-1.5 rounded-full transition">
+              <button type="submit" className="shrink-0 text-xs font-semibold text-white bg-cta-500 hover:bg-cta-600 px-4 py-2 rounded-full transition">
                 Search
               </button>
             </div>
