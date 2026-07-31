@@ -17,13 +17,13 @@ export function CategoryGrid() {
         <div className="flex items-end justify-between mb-10 gap-6">
           <div>
             <div className="text-xs uppercase tracking-[0.24em] text-brand-600 mb-2">Shop by Category</div>
-            <h2 className="font-display text-3xl md:text-5xl text-brand-950 dark:text-zinc-100 text-balance">
-              Eight aisles of <span className="italic text-brand-600 dark:text-brand-400">farm-fresh</span> goodness.
+            <h2 className="font-display text-3xl md:text-5xl text-brand-950 text-balance">
+              Eight aisles of <span className="italic text-brand-600">farm-fresh</span> goodness.
             </h2>
           </div>
           <Link
             href="/shop"
-            className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-800 dark:text-zinc-200 hover:text-brand-600"
+            className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-800 hover:text-brand-600"
           >
             Browse all categories <ArrowUpRight className="w-4 h-4" />
           </Link>
@@ -53,12 +53,12 @@ export function CategoryGrid() {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-110 mix-blend-multiply opacity-90 dark:opacity-80"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                  
-                  {/* Coming Soon Badge */}
-                  {isComingSoon && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                  {/* Coming Soon Badge (Selective) */}
+                  {isComingSoon && !["fruits", "leafy-greens", "exotic"].includes(c.slug) && (
                     <div className="absolute top-3.5 right-3.5 z-10 bg-black/70 dark:bg-zinc-900/90 backdrop-blur-md text-amber-300 font-bold text-[11px] px-3 py-1.5 rounded-full border border-amber-400/40 shadow-lg flex items-center gap-1.5 animate-pulse">
-                      <Rocket className="w-3 h-3 text-amber-400" />
+                      <Rocket className="w-3.5 h-3.5 text-amber-400" />
                       <span>Coming Soon</span>
                     </div>
                   )}
@@ -66,8 +66,8 @@ export function CategoryGrid() {
                   <div className="absolute inset-x-5 bottom-5 text-white">
                     <div className="flex items-end justify-between">
                       <div>
-                        <div className="font-display text-xl md:text-2xl leading-tight font-bold">{c.name}</div>
-                        <div className="text-xs text-white/80 mt-1 font-medium">
+                        <div className="font-display text-xl md:text-2xl leading-tight font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">{c.name}</div>
+                        <div className="text-xs text-white/95 mt-2 font-medium tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
                           {isComingSoon ? "Launching Soon" : `${c.count} items`}
                         </div>
                       </div>

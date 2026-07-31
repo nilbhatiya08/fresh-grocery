@@ -30,6 +30,7 @@ import { products, categories, cities } from "@/data/catalog";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CityModal } from "@/components/city/CityModal";
+import { isCategoryComingSoon } from "@/lib/categoryHelper";
 
 const nav = [
   { label: "Shop", href: "/shop", icon: Tag },
@@ -254,21 +255,26 @@ export function Header() {
                     onMouseLeave={() => setCatsOpen(false)}
                     className="absolute top-[calc(100%+16px)] left-0 w-[520px] glass-strong rounded-2xl shadow-lift border border-brand-100 p-4 grid grid-cols-2 gap-1 z-50"
                   >
-                    {categories.map((c) => (
-                      <Link
-                        key={c.slug}
-                        href={`/shop?cat=${c.slug}`}
-                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-brand-50"
-                      >
-                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-brand-50 shrink-0">
-                          <img src={c.image} alt="" className="w-full h-full object-cover" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">{c.name}</div>
-                          <div className="text-xs text-brand-500">{c.count} items</div>
-                        </div>
-                      </Link>
-                    ))}
+                    {categories.map((c) => {
+                      const isComingSoon = isCategoryComingSoon(c.slug);
+                      return (
+                        <Link
+                          key={c.slug}
+                          href={`/shop?cat=${c.slug}`}
+                          className="flex items-center gap-3 p-2 rounded-xl hover:bg-brand-50"
+                        >
+                          <div className="w-10 h-10 rounded-lg overflow-hidden bg-brand-50 shrink-0">
+                            <img src={c.image} alt="" className="w-full h-full object-cover" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium">{c.name}</div>
+                            <div className="text-xs text-brand-500">
+                              {isComingSoon ? "Coming Soon" : `${c.count} items`}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
                   </motion.div>
                 )}
               </AnimatePresence>

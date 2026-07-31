@@ -29,7 +29,8 @@ import {
   ChevronDown,
   ShieldAlert,
   CheckCircle2,
-  MessageSquare
+  MessageSquare,
+  MessageCircleMore,
 } from "lucide-react";
 import { useAdminAuth, type AdminRole } from "@/store/adminAuth";
 import { useAdminStore } from "@/store/adminStore";
@@ -128,6 +129,12 @@ export function AdminLayout({ children, activeModule, onSelectModule }: AdminLay
         { id: "cms", label: "Homepage CMS", icon: LayoutTemplate, permission: "cms.view" },
         { id: "delivery", label: "Delivery Zones", icon: Truck, permission: "delivery.view" },
         { id: "notifications", label: "Notifications", icon: Bell, permission: "notifications.view" }
+      ]
+    },
+    {
+      title: "Marketing",
+      items: [
+        { id: "whatsapp", label: "WhatsApp Subscribers", icon: MessageCircleMore, permission: "notifications.view" },
       ]
     },
     {

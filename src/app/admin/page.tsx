@@ -21,6 +21,7 @@ import { NotificationManagement } from "@/components/admin/modules/NotificationM
 import { ReportsAnalytics } from "@/components/admin/modules/ReportsAnalytics";
 import { SecurityRBAC } from "@/components/admin/modules/SecurityRBAC";
 import { SettingsModule } from "@/components/admin/modules/SettingsModule";
+import { WhatsAppSubscribersModule } from "@/components/admin/modules/WhatsAppSubscribersModule";
 import { RefreshCw, ShieldCheck } from "lucide-react";
 
 export default function AdminPortalPage() {
@@ -93,6 +94,8 @@ export default function AdminPortalPage() {
         return <SecurityRBAC />;
       case "settings":
         return <SettingsModule />;
+      case "whatsapp":
+        return <WhatsAppSubscribersModule />;
       default:
         return <AdminDashboard onNavigate={(mod) => setActiveModule(mod)} />;
     }
