@@ -65,6 +65,18 @@ export function Hero() {
   const [paused, setPaused] = useState(false);
   const citySlug = useCity((s) => s.slug);
   const currentCity = cities.find((c) => c.slug === citySlug) ?? cities[0];
+  const [showDairyModal, setShowDairyModal] = useState(false);
+
+  useEffect(() => {
+    if (!showDairyModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setShowDairyModal(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showDairyModal]);
 
   useEffect(() => {
     if (paused) return;
@@ -181,28 +193,88 @@ export function Hero() {
       <div className="relative mx-auto max-w-7xl px-5 md:px-8 -mt-16 md:-mt-20 z-10">
         <div className="grid md:grid-cols-3 gap-4">
           {[
-            { icon: Zap, mode: "instant", title: "Instant Delivery", desc: "Fresh vegetables in 30–40 mins", bg: "from-cta-500 to-orange-500", cta: "Shop now", href: "/shop?mode=instant", live: "Live in Ahmedabad · Gandhinagar" },
-            { icon: Package, mode: "bulk", title: "Bulk Orders", desc: "Next-day for restaurants & caterers", bg: "from-brand-800 to-brand-600", cta: "Plan bulk", href: "/bulk", live: "GST invoices · from ₹5,000" },
-            { icon: Leaf, mode: "subscription", title: "Sabzi Subscription", desc: "Daily sabzi & salad every morning", bg: "from-emerald-600 to-teal-600", cta: "Subscribe", href: "/subscription", live: "Pause · Skip · Resume anytime" },
-          ].map((c) => (
-            <Link
-              key={c.mode}
-              href={c.href}
-              className={`group relative overflow-hidden rounded-3xl p-5 text-white bg-gradient-to-br ${c.bg} shadow-lift hover:-translate-y-1 transition-transform`}
-            >
-              <div className="flex items-start justify-between mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur grid place-items-center">
-                  <c.icon className="w-6 h-6" />
+            { icon: Zap, mode: "instant", title: "Instant Delivery", desc: "Fresh vegetables in 30–40 mins", bg: "from-cta-500 to-orange-500", cta: "Shop now", href: "/shop?mode=instant", live: "Live in Ahmedabad · Gandhinagar", isModal: false },
+            { icon: Package, mode: "bulk", title: "Bulk Orders", desc: "Next-day for restaurants & caterers", bg: "from-brand-800 to-brand-600", cta: "Plan bulk", href: "/bulk", live: "GST invoices · from ₹5,000", isModal: false },
+            { icon: Milk, mode: "dairy", title: "Dairy Products", desc: "Fresh milk, paneer, curd, butter & more.", bg: "from-emerald-600 to-teal-600", cta: "Coming Soon", href: "#", live: "COMING SOON", isModal: true },
+          ].map((c) => {
+            const cardContent = (
+              <>
+                <div className="flex items-start justify-between mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur grid place-items-center">
+                    <c.icon className="w-6 h-6" />
+                  </div>
+                  {!c.isModal && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />}
                 </div>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
-              </div>
-              <div className="font-display text-2xl leading-tight">{c.title}</div>
-              <div className="text-sm text-white/85 mt-1">{c.desc}</div>
-              <div className="text-[11px] mt-3 text-white/70 uppercase tracking-wider">{c.live}</div>
-            </Link>
-          ))}
+                <div className="font-display text-2xl leading-tight">{c.title}</div>
+                <div className="text-sm text-white/85 mt-1">{c.desc}</div>
+                <div className="text-[11px] mt-3 text-white/70 uppercase tracking-wider">{c.live}</div>
+              </>
+            );
+
+            if (c.isModal) {
+              return (
+                <button
+                  key={c.mode}
+                  onClick={() => setShowDairyModal(true)}
+                  className={`group relative overflow-hidden rounded-3xl p-5 text-left text-white bg-gradient-to-br ${c.bg} shadow-lift hover:-translate-y-1 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 focus:outline-none`}
+                >
+                  {cardContent}
+                </button>
+              );
+            }
+
+            return (
+              <Link
+                key={c.mode}
+                href={c.href}
+                className={`group relative overflow-hidden rounded-3xl p-5 text-white bg-gradient-to-br ${c.bg} shadow-lift hover:-translate-y-1 transition-transform`}
+              >
+                {cardContent}
+              </Link>
+            );
+          })}
         </div>
       </div>
+
+      {/* Dairy Coming Soon Modal */}
+      <AnimatePresence>
+        {showDairyModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-950/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0"
+              onClick={() => setShowDairyModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative w-full max-w-md overflow-hidden bg-cream-50 border border-brand-100 rounded-3xl p-6 md:p-8 text-center shadow-lift z-10"
+            >
+              <div className="mx-auto w-16 h-16 rounded-2xl bg-brand-100 grid place-items-center text-4xl mb-4">
+                🥛
+              </div>
+              <h3 className="font-display text-2xl text-brand-900 mb-1">
+                Dairy Products
+              </h3>
+              <div className="text-xs font-bold text-cta-600 uppercase tracking-widest mb-3">
+                Coming Soon
+              </div>
+              <p className="text-sm text-brand-700 leading-relaxed mb-6">
+                We&apos;re working hard to bring fresh dairy products to your doorstep. Stay tuned!
+              </p>
+              <button
+                onClick={() => setShowDairyModal(false)}
+                className="w-full bg-brand-900 hover:bg-brand-950 text-white rounded-full py-3 font-semibold text-sm transition"
+              >
+                Close
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

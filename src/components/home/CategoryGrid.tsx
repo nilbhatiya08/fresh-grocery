@@ -18,7 +18,7 @@ export function CategoryGrid() {
           <div>
             <div className="text-xs uppercase tracking-[0.24em] text-brand-600 mb-2">Shop by Category</div>
             <h2 className="font-display text-3xl md:text-5xl text-brand-950 dark:text-zinc-100 text-balance">
-              Twelve aisles of <span className="italic text-brand-600 dark:text-brand-400">farm-fresh</span> goodness.
+              Eight aisles of <span className="italic text-brand-600 dark:text-brand-400">farm-fresh</span> goodness.
             </h2>
           </div>
           <Link

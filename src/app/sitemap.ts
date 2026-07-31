@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { products, categories, recipes } from "@/data/catalog";
+import { products, categories } from "@/data/catalog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://farmora.vercel.app";
@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/shop`, lastModified: today, changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/about`, lastModified: today, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/contact`, lastModified: today, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/recipes`, lastModified: today, changeFrequency: "weekly", priority: 0.7 },
     ...categories.map((c) => ({
       url: `${base}/shop?cat=${c.slug}`,
       lastModified: today,
@@ -21,12 +20,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: today,
       changeFrequency: "weekly" as const,
       priority: 0.85,
-    })),
-    ...recipes.map((r) => ({
-      url: `${base}/recipes/${r.slug}`,
-      lastModified: today,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
     })),
   ];
 }

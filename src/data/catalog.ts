@@ -83,10 +83,6 @@ export const categories: Category[] = [
   { slug: "seasonal", name: "Seasonal Fruits", image: "/images/categories/seasonal.png", count: 23, accent: "from-rose-200 to-pink-100", status: "Coming Soon" },
   { slug: "dairy", name: "Milk & Dairy", image: "/images/categories/dairy.png", count: 34, accent: "from-sky-200 to-blue-100", status: "Coming Soon" },
   { slug: "bakery", name: "Bakery", image: "/images/categories/bakery.png", count: 22, accent: "from-yellow-200 to-amber-100", status: "Coming Soon" },
-  { slug: "snacks", name: "Healthy Snacks", image: "/images/categories/snacks.png", count: 38, accent: "from-orange-200 to-amber-100", status: "Coming Soon" },
-  { slug: "juices", name: "Cold Pressed Juices", image: "/images/categories/juices.png", count: 14, accent: "from-red-200 to-rose-100", status: "Coming Soon" },
-  { slug: "dry-fruits", name: "Dry Fruits", image: "/images/categories/dry-fruits.png", count: 27, accent: "from-amber-200 to-yellow-100", status: "Coming Soon" },
-  { slug: "essentials", name: "Cooking Essentials", image: "/images/categories/essentials.png", count: 49, accent: "from-stone-200 to-neutral-100", status: "Coming Soon" },
 ];
 
 // ──────────────────────── Product factory ────────────────────────
