@@ -112,3 +112,17 @@
   border-color: var(--color-brand-500);
   box-shadow: 0 0 0 4px var(--color-brand-50);
 }
+
+:root {
+  --header-height: 112px;
+}
+
+@media (max-w: 768px) {
+  :root {
+    --header-height: 68px;
+  }
+}
+
+main {
+  margin-top: var(--header-height);
+}

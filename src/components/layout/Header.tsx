@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,7 +17,6 @@ import {
   Tag,
   Leaf,
   Phone,
-  BookOpen,
   Info,
   Zap,
   Package,
@@ -37,7 +36,6 @@ const nav = [
   { label: "Instant", href: "/shop?mode=instant", icon: Zap },
   { label: "Bulk Orders", href: "/bulk", icon: Package },
   { label: "Dairy Subscription", href: "/subscription", icon: Milk },
-  { label: "Recipes", href: "/recipes", icon: BookOpen },
   { label: "Our Farmers", href: "/farmers", icon: Leaf },
   { label: "About", href: "/about", icon: Info },
   { label: "Contact", href: "/contact", icon: Phone },
@@ -58,6 +56,29 @@ export function Header() {
   const openCart = useCart((s) => s.open);
   const citySlug = useCity((s) => s.slug);
   const currentCity = cities.find((c) => c.slug === citySlug) ?? cities[0];
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (headerRef.current) {
+        const height = headerRef.current.offsetHeight;
+        document.documentElement.style.setProperty("--header-height", `${height}px`);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    
+    const observer = new MutationObserver(handleResize);
+    if (headerRef.current) {
+      observer.observe(headerRef.current, { attributes: true, childList: true, subtree: true });
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -75,7 +96,7 @@ export function Header() {
     : [];
 
   return (
-    <>
+    <div ref={headerRef} className="fixed top-0 left-0 right-0 z-50">
       {/* Top strip */}
       <div className="hidden md:block bg-brand-900 text-brand-50 text-xs">
         <div className="mx-auto max-w-7xl px-6 py-2 flex items-center justify-between">
@@ -108,7 +129,7 @@ export function Header() {
             : "bg-cream-50/80 backdrop-blur-md"
         )}
       >
-        <div className="mx-auto max-w-7xl px-4 md:px-6 py-3 flex items-center gap-3 md:gap-6">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 py-3 flex items-center justify-between gap-4 lg:gap-6">
           {/* Mobile menu */}
           <button
             onClick={() => setMenuOpen(true)}
@@ -153,7 +174,7 @@ export function Header() {
           </button>
 
           {/* Search */}
-          <form onSubmit={(e) => { e.preventDefault(); if (query.trim()) { router.push(`/shop?q=${encodeURIComponent(query.trim())}`); setQuery(""); } }} className="flex-1 max-w-xl relative hidden md:block">
+          <form onSubmit={(e) => { e.preventDefault(); if (query.trim()) { router.push(`/shop?q=${encodeURIComponent(query.trim())}`); setQuery(""); } }} className="flex-1 min-w-[120px] max-w-md xl:max-w-[280px] 2xl:max-w-xl relative hidden md:block">
             <div className="flex items-center glass border border-brand-100 rounded-full pl-4 pr-2 py-2 focus-within:border-brand-500 focus-within:ring-4 focus-within:ring-brand-100 transition">
               <Search className="w-4 h-4 text-brand-500" />
               <input
@@ -231,7 +252,7 @@ export function Header() {
                     exit={{ opacity: 0, y: 6 }}
                     onMouseEnter={() => setCatsOpen(true)}
                     onMouseLeave={() => setCatsOpen(false)}
-                    className="absolute top-full left-0 mt-1 w-[520px] glass-strong rounded-2xl shadow-lift border border-brand-100 p-4 grid grid-cols-2 gap-1 z-50"
+                    className="absolute top-[calc(100%+16px)] left-0 w-[520px] glass-strong rounded-2xl shadow-lift border border-brand-100 p-4 grid grid-cols-2 gap-1 z-50"
                   >
                     {categories.map((c) => (
                       <Link
@@ -260,11 +281,10 @@ export function Header() {
             <Link href="/offers" className="px-3 py-2 rounded-full hover:bg-brand-50 text-brand-800 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-cta-500"/> Offers
             </Link>
-            <Link href="/recipes" className="px-3 py-2 rounded-full hover:bg-brand-50 text-brand-800">Recipes</Link>
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-1 ml-auto md:ml-0">
+          <div className="flex items-center gap-1.5 md:gap-2 ml-auto shrink-0">
             {isAuthenticated && isAdmin && (
               <Link
                 href="/admin"
@@ -482,6 +502,6 @@ export function Header() {
 
       {/* City selector modal */}
       <CityModal open={cityOpen} onClose={() => setCityOpen(false)} />
-    </>
+    </div>
   );
 }
