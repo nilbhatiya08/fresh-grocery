@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Rocket } from "lucide-react";
 import { categories as staticCategories } from "@/data/catalog";
 import { useAdminStore } from "@/store/adminStore";
 import { getCategoryStatus } from "@/lib/categoryHelper";
@@ -54,6 +54,14 @@ export function CategoryGrid() {
                     className="object-cover transition-transform duration-700 group-hover:scale-110 mix-blend-multiply opacity-90 dark:opacity-80"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                  {/* Coming Soon Badge (Selective) */}
+                  {isComingSoon && !["fruits", "leafy-greens", "exotic"].includes(c.slug) && (
+                    <div className="absolute top-3.5 right-3.5 z-10 bg-black/70 dark:bg-zinc-900/90 backdrop-blur-md text-amber-300 font-bold text-[11px] px-3 py-1.5 rounded-full border border-amber-400/40 shadow-lg flex items-center gap-1.5 animate-pulse">
+                      <Rocket className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Coming Soon</span>
+                    </div>
+                  )}
 
                   <div className="absolute inset-x-5 bottom-5 text-white">
                     <div className="flex items-end justify-between">
