@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Timer, Flame, Zap } from "lucide-react";
+import { Flame } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
 import { products } from "@/data/catalog";
+import { WhatsAppSubscription } from "@/components/home/WhatsAppSubscription";
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState(Date.now());
@@ -74,6 +75,9 @@ export function DealsCountdown() {
               <Pad value={s} label="Secs" />
             </div>
           </div>
+
+          {/* WhatsApp Subscription */}
+          <WhatsAppSubscription />
 
           <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4">
             {deals.map((p) => (
