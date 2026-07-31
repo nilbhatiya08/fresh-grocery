@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Rocket } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { categories as staticCategories } from "@/data/catalog";
 import { useAdminStore } from "@/store/adminStore";
 import { getCategoryStatus } from "@/lib/categoryHelper";
@@ -53,21 +53,13 @@ export function CategoryGrid() {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-110 mix-blend-multiply opacity-90 dark:opacity-80"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                  
-                  {/* Coming Soon Badge */}
-                  {isComingSoon && (
-                    <div className="absolute top-3.5 right-3.5 z-10 bg-black/70 dark:bg-zinc-900/90 backdrop-blur-md text-amber-300 font-bold text-[11px] px-3 py-1.5 rounded-full border border-amber-400/40 shadow-lg flex items-center gap-1.5 animate-pulse">
-                      <Rocket className="w-3 h-3 text-amber-400" />
-                      <span>Coming Soon</span>
-                    </div>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
                   <div className="absolute inset-x-5 bottom-5 text-white">
                     <div className="flex items-end justify-between">
                       <div>
-                        <div className="font-display text-xl md:text-2xl leading-tight font-bold">{c.name}</div>
-                        <div className="text-xs text-white/80 mt-1 font-medium">
+                        <div className="font-display text-xl md:text-2xl leading-tight font-extrabold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">{c.name}</div>
+                        <div className="text-xs text-white/95 mt-2 font-medium tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
                           {isComingSoon ? "Launching Soon" : `${c.count} items`}
                         </div>
                       </div>
