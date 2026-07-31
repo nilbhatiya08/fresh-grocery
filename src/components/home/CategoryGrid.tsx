@@ -17,13 +17,13 @@ export function CategoryGrid() {
         <div className="flex items-end justify-between mb-10 gap-6">
           <div>
             <div className="text-xs uppercase tracking-[0.24em] text-brand-600 mb-2">Shop by Category</div>
-            <h2 className="font-display text-3xl md:text-5xl text-brand-950 dark:text-zinc-100 text-balance">
-              Eight aisles of <span className="italic text-brand-600 dark:text-brand-400">farm-fresh</span> goodness.
+            <h2 className="font-display text-3xl md:text-5xl text-brand-950 text-balance">
+              Eight aisles of <span className="italic text-brand-600">farm-fresh</span> goodness.
             </h2>
           </div>
           <Link
             href="/shop"
-            className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-800 dark:text-zinc-200 hover:text-brand-600"
+            className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-800 hover:text-brand-600"
           >
             Browse all categories <ArrowUpRight className="w-4 h-4" />
           </Link>
